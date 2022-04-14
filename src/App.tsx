@@ -1,10 +1,13 @@
+import AppLayout from "layout/AppLayout";
 import { Bugs } from "./components/Bugs";
 import AppProviders from "./context/AppProviders";
 
 function App() {
   return (
     <AppProviders>
-      <Bugs />
+      <AppLayout>
+        <Bugs />
+      </AppLayout>
     </AppProviders>
   );
 }

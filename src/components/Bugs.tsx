@@ -1,24 +1,13 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { getUnresolvedBugs, loadBugs } from "../store/bugs";
-import { Bug } from "../types/types";
+import Loading from "common/Loading";
+import { useGetAllBugsQuery } from "services/bugsapi";
+import BugsListTable from "./BugsListTable";
 
 export const Bugs = () => {
-  const dispatch = useDispatch();
-  const bugs = useSelector(getUnresolvedBugs);
-
-  useEffect(() => {
-    dispatch(loadBugs());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const { data, isLoading, isError, error } = useGetAllBugsQuery({});
 
   return (
-    <ul>
-      {bugs.map((bug: Bug) => (
-        <li key={bug.id}>
-          {bug.id} - {bug.title} - {bug.description}
-        </li>
-      ))}
-    </ul>
+    <Loading isLoading={isLoading} error={error} isError={isError}>
+      {data && <BugsListTable data={data} />}
+    </Loading>
   );
 };
