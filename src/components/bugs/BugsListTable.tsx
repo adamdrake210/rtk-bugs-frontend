@@ -5,7 +5,7 @@ import { Bug } from "types/types";
 import BugTableRow from "./BugTableRow";
 
 interface Column {
-  id: "title" | "description" | "userid" | "edit" | "delete" | "clone";
+  id: "title" | "description" | "userid" | "edit" | "delete";
   label: string;
   minWidth?: number;
   maxWidth?: number;
@@ -20,11 +20,6 @@ const columns: Column[] = [
   {
     id: "edit",
     label: "Edit",
-    width: 120,
-  },
-  {
-    id: "clone",
-    label: "Clone",
     width: 120,
   },
   {

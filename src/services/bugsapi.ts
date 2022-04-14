@@ -6,7 +6,7 @@ export const bugsApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: process.env.REACT_APP_RTK_BUGS_API }),
   tagTypes: ["Bug"],
   endpoints: (builder) => ({
-    getAllBugs: builder.query<Bug[], any>({
+    getAllBugs: builder.query<Bug[], void>({
       query: () => `/bugs`,
       providesTags: ["Bug"],
     }),
@@ -21,12 +21,13 @@ export const bugsApi = createApi({
       }),
       invalidatesTags: ["Bug"],
     }),
-    updateBug: builder.mutation<Bug, Partial<Bug>>({
+    updateBug: builder.mutation<Bug, Partial<Bug> & Pick<Bug, "id">>({
       query: (bug) => ({
         url: `/bugs/${bug.id}`,
         method: "PATCH",
         body: bug,
       }),
+      invalidatesTags: ["Bug"],
     }),
   }),
 });
