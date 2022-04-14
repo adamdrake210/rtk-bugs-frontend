@@ -6,6 +6,13 @@ export type Bug = {
   user: User;
 };
 
+export type CreateBugPayload = {
+  title: string;
+  description: string;
+  userId: number;
+  resolved: boolean;
+};
+
 export type User = {
   id: number;
   firstname: string;
