@@ -21,12 +21,13 @@ export const bugsApi = createApi({
       }),
       invalidatesTags: ["Bug"],
     }),
-    updateBug: builder.mutation<Bug, Partial<Bug>>({
+    updateBug: builder.mutation<Bug, Partial<Bug> & Pick<Bug, "id">>({
       query: (bug) => ({
         url: `/bugs/${bug.id}`,
         method: "PATCH",
         body: bug,
       }),
+      invalidatesTags: ["Bug"],
     }),
   }),
 });
