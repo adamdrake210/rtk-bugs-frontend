@@ -21,9 +21,6 @@ const BugTableRow = ({ bug }: Props) => {
         {/* <EditExperimentButton experiment={experiment} /> */}
       </TableCell>
       <TableCell>
-        {/* <CloneExperimentButton experiment={experiment} /> */}
-      </TableCell>
-      <TableCell>
         {/* <DeleteExperimentButton experiment={experiment} /> */}
       </TableCell>
     </TableRow>
