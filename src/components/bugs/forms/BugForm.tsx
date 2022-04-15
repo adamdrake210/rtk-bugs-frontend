@@ -15,7 +15,9 @@ const useStyles = makeStyles<Theme>((theme) => ({
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
-    width: 400,
+    maxWidth: 400,
+    minWidth: 300,
+    width: "100%",
   },
   buttonsContainer: {
     display: "flex",
