@@ -54,10 +54,6 @@ export default function BugForm({ handleClose, editBug }: FormProps) {
   ] = useUpdateBugMutation();
 
   const onSubmit = (formData: CreateFormValues) => {
-    console.log(
-      "🚀 ~ file: BugForm.tsx ~ line 57 ~ onSubmit ~ formData",
-      formData
-    );
     const { title, description, userid } = formData;
 
     if (!userid) {
