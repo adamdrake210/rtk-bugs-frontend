@@ -59,6 +59,7 @@ export default function BugForm({ handleClose, editBug }: FormProps) {
 
   const onSubmit = (formData: CreateFormValues) => {
     const { title, description, userid } = formData;
+    setApiError("");
 
     if (!userid) {
       throw new Error("You must pick a user");
