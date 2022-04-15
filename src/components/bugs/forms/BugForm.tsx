@@ -4,7 +4,8 @@ import ControlledTextField from "common/fields/ControlledTextField";
 import Loading from "common/Loading";
 import { IS_ONLY_ALPHABET_CHARACTERS } from "constants/form";
 import { useForm } from "react-hook-form";
-import { useAddNewBugMutation } from "services/bugsapi";
+import { useAddNewBugMutation, useUpdateBugMutation } from "services/bugsapi";
+import { Bug } from "types/types";
 
 const useStyles = makeStyles<Theme>((theme) => ({
   formContainer: {
@@ -31,20 +32,25 @@ type CreateFormValues = {
 
 type FormProps = {
   handleClose: () => void;
+  editBug?: Bug;
 };
 
-export default function BugForm({ handleClose }: FormProps) {
+export default function BugForm({ handleClose, editBug }: FormProps) {
   const classes = useStyles();
 
   const { handleSubmit, control } = useForm<CreateFormValues>({
     defaultValues: {
-      title: "",
-      description: "",
-      userid: undefined,
+      title: editBug?.title || "",
+      description: editBug?.description || "",
+      userid: editBug?.user.id || undefined,
     },
   });
 
   const [addBug, { isLoading, isError, error }] = useAddNewBugMutation();
+  const [
+    updateBug,
+    { isLoading: isLoadingEdit, isError: isErrorEdit, error: errorEdit },
+  ] = useUpdateBugMutation();
 
   const onSubmit = (formData: CreateFormValues) => {
     const { title, description, userid } = formData;
@@ -54,18 +60,33 @@ export default function BugForm({ handleClose }: FormProps) {
       userId: userid || 1,
       resolved: false,
     };
-    addBug(finalFormData)
-      .unwrap()
-      .then((fulfilled) => {
-        console.log(fulfilled);
-        handleClose();
+
+    if (editBug) {
+      updateBug({
+        id: editBug.id,
+        title,
+        description,
       })
-      .catch((rejected) => console.error(rejected));
+        .unwrap()
+        .then((response) => {
+          handleClose();
+        })
+        .catch((error) => {
+          console.error("error", error);
+        });
+    } else {
+      addBug(finalFormData)
+        .unwrap()
+        .then((fulfilled) => {
+          handleClose();
+        })
+        .catch((rejected) => console.error(rejected));
+    }
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={classes.formContainer}>
-      <Typography variant="h4">Create Bug</Typography>
+      <Typography variant="h4">{editBug ? "Edit" : "Create"} Bug</Typography>
 
       <Box
         sx={{ display: "flex", flexDirection: "column", my: 2, width: "100%" }}
@@ -82,7 +103,7 @@ export default function BugForm({ handleClose }: FormProps) {
             },
             pattern: IS_ONLY_ALPHABET_CHARACTERS,
           }}
-          disabled={isLoading}
+          disabled={isLoading || isLoadingEdit}
         />
 
         <ControlledTextField
@@ -97,7 +118,7 @@ export default function BugForm({ handleClose }: FormProps) {
                 "Max Length exceeded! Please make the description shorter.",
             },
           }}
-          disabled={isLoading}
+          disabled={isLoading || isLoadingEdit}
         />
 
         <ControlledTextField
@@ -108,7 +129,7 @@ export default function BugForm({ handleClose }: FormProps) {
           rules={{
             required: "User ID is required",
           }}
-          disabled={isLoading}
+          disabled={isLoading || isLoadingEdit}
         />
       </Box>
 
@@ -121,12 +142,31 @@ export default function BugForm({ handleClose }: FormProps) {
         />
       )}
 
+      {isLoadingEdit && (
+        <Loading
+          isLoading={isLoadingEdit}
+          loadingMessage="Updating Bug..."
+          isError={isErrorEdit}
+          error={errorEdit}
+        />
+      )}
+
       <div className={classes.buttonsContainer}>
-        <Button onClick={handleClose} type="button" variant="outlined">
+        <Button
+          onClick={handleClose}
+          type="button"
+          variant="outlined"
+          disabled={isLoading || isLoadingEdit}
+        >
           Cancel
         </Button>
-        <Button type="submit" variant="contained" color="primary">
-          Create Bug
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          disabled={isLoading || isLoadingEdit}
+        >
+          {editBug ? "Edit" : "Create"} Bug
         </Button>
       </div>
     </form>
