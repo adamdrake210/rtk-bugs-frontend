@@ -18,7 +18,9 @@ const BugTableRow = ({ bug }: Props) => {
         {/* </Link> */}
       </TableCell>
       <TableCell>{bug.description}</TableCell>
-      <TableCell>{bug.user.id}</TableCell>
+      <TableCell sx={{ textTransform: "uppercase" }}>
+        {bug.user.firstname} {bug.user.lastname}
+      </TableCell>
       <TableCell>
         <EditBugButton bug={bug} />
       </TableCell>
