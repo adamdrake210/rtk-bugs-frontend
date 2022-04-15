@@ -4,6 +4,7 @@ import ControlledTextField from "common/fields/ControlledTextField";
 import UserSelectField from "common/fields/UserSelectField";
 import Loading from "common/Loading";
 import { IS_ONLY_ALPHABET_CHARACTERS } from "constants/form";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useAddNewBugMutation, useUpdateBugMutation } from "services/bugsapi";
 import { Bug } from "types/types";
@@ -38,6 +39,7 @@ type FormProps = {
 
 export default function BugForm({ handleClose, editBug }: FormProps) {
   const classes = useStyles();
+  const [apiError, setApiError] = useState<string | undefined>();
 
   const { handleSubmit, control } = useForm<CreateFormValues>({
     defaultValues: {
@@ -54,10 +56,6 @@ export default function BugForm({ handleClose, editBug }: FormProps) {
   ] = useUpdateBugMutation();
 
   const onSubmit = (formData: CreateFormValues) => {
-    console.log(
-      "🚀 ~ file: BugForm.tsx ~ line 57 ~ onSubmit ~ formData",
-      formData
-    );
     const { title, description, userid } = formData;
 
     if (!userid) {
@@ -91,7 +89,10 @@ export default function BugForm({ handleClose, editBug }: FormProps) {
         .then((fulfilled) => {
           handleClose();
         })
-        .catch((rejected) => console.error(rejected));
+        .catch((error) => {
+          setApiError(error.data.message);
+          console.error("addBugError: ", error.data.message);
+        });
     }
   };
 
@@ -151,6 +152,11 @@ export default function BugForm({ handleClose, editBug }: FormProps) {
           isError={isErrorEdit}
           error={errorEdit}
         />
+      )}
+      {apiError && (
+        <Typography variant="body1" color="error">
+          Something went wrong - {apiError}
+        </Typography>
       )}
 
       <div className={classes.buttonsContainer}>
