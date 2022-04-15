@@ -2,6 +2,7 @@
 import { TableCell, TableRow } from "@mui/material";
 
 import { Bug } from "types/types";
+import EditBugButton from "./buttons/EditBugButton";
 
 type Props = {
   bug: Bug;
@@ -18,7 +19,7 @@ const BugTableRow = ({ bug }: Props) => {
       <TableCell>{bug.description}</TableCell>
       <TableCell>{bug.user.id}</TableCell>
       <TableCell>
-        {/* <EditExperimentButton experiment={experiment} /> */}
+        <EditBugButton bug={bug} />
       </TableCell>
       <TableCell>
         {/* <DeleteExperimentButton experiment={experiment} /> */}
