@@ -1,14 +1,17 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { Bug, CreateBugPayload } from "types/types";
 
+export const BUGS_API_REDUCER_KEY = "bugs";
+const BUGS_API_TAG = "Bug";
+
 export const bugsApi = createApi({
-  reducerPath: "bugs",
-  baseQuery: fetchBaseQuery({ baseUrl: process.env.REACT_APP_RTK_BUGS_API }),
-  tagTypes: ["Bug"],
+  reducerPath: BUGS_API_REDUCER_KEY,
+  baseQuery: fetchBaseQuery({ baseUrl: process.env.REACT_APP_RTK_API }),
+  tagTypes: [BUGS_API_TAG],
   endpoints: (builder) => ({
     getAllBugs: builder.query<Bug[], void>({
       query: () => `/bugs`,
-      providesTags: ["Bug"],
+      providesTags: [BUGS_API_TAG],
     }),
     getBugById: builder.query<Bug, number>({
       query: (id) => `bugs/${id}`,
@@ -19,7 +22,7 @@ export const bugsApi = createApi({
         method: "POST",
         body: initialBug,
       }),
-      invalidatesTags: ["Bug"],
+      invalidatesTags: [BUGS_API_TAG],
     }),
     updateBug: builder.mutation<Bug, Partial<Bug> & Pick<Bug, "id">>({
       query: (bug) => ({
@@ -27,14 +30,14 @@ export const bugsApi = createApi({
         method: "PATCH",
         body: bug,
       }),
-      invalidatesTags: ["Bug"],
+      invalidatesTags: [BUGS_API_TAG],
     }),
     removeBug: builder.mutation<void, number>({
       query: (id) => ({
         url: `/bugs/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["Bug"],
+      invalidatesTags: [BUGS_API_TAG],
     }),
   }),
 });
