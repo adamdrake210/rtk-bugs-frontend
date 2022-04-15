@@ -21,7 +21,7 @@ export default function DeleteBugButton({ bug }: DeleteBugButtonProps) {
       throw new Error("Bugs without id cannot be handled!");
     }
     try {
-      await removeBug(bug.id);
+      await removeBug(bug.id).unwrap();
       handleClose();
     } catch (error) {
       console.error("Delete bug error: ", error);

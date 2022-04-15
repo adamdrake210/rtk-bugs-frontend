@@ -1,6 +1,7 @@
 import { Box, Button, Theme, Typography } from "@mui/material";
 import makeStyles from "@mui/styles/makeStyles";
 import ControlledTextField from "common/fields/ControlledTextField";
+import UserSelectField from "common/fields/UserSelectField";
 import Loading from "common/Loading";
 import { IS_ONLY_ALPHABET_CHARACTERS } from "constants/form";
 import { useForm } from "react-hook-form";
@@ -53,11 +54,20 @@ export default function BugForm({ handleClose, editBug }: FormProps) {
   ] = useUpdateBugMutation();
 
   const onSubmit = (formData: CreateFormValues) => {
+    console.log(
+      "🚀 ~ file: BugForm.tsx ~ line 57 ~ onSubmit ~ formData",
+      formData
+    );
     const { title, description, userid } = formData;
+
+    if (!userid) {
+      throw new Error("You must pick a user");
+    }
+
     const finalFormData = {
       title,
       description,
-      userId: userid || 1,
+      userId: userid,
       resolved: false,
     };
 
@@ -66,6 +76,7 @@ export default function BugForm({ handleClose, editBug }: FormProps) {
         id: editBug.id,
         title,
         description,
+        userId: userid,
       })
         .unwrap()
         .then((response) => {
@@ -121,16 +132,7 @@ export default function BugForm({ handleClose, editBug }: FormProps) {
           disabled={isLoading || isLoadingEdit}
         />
 
-        <ControlledTextField
-          type="number"
-          control={control}
-          name="userid"
-          label="User ID"
-          rules={{
-            required: "User ID is required",
-          }}
-          disabled={isLoading || isLoadingEdit}
-        />
+        <UserSelectField control={control} />
       </Box>
 
       {isLoading && (

@@ -22,7 +22,7 @@ const api =
     next(action);
     try {
       const response = await axios.request({
-        baseURL: process.env.REACT_APP_RTK_BUGS_API,
+        baseURL: process.env.REACT_APP_RTK_API,
         url,
         method,
         data,

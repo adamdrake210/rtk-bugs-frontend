@@ -13,8 +13,15 @@ export type CreateBugPayload = {
   resolved: boolean;
 };
 
+export type UpdateBugPayload = {
+  title?: string;
+  description?: string;
+  userId?: number;
+};
+
 export type User = {
   id: number;
   firstname: string;
   lastname: string;
+  bugs?: Bug[];
 };
