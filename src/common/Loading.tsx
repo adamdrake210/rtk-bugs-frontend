@@ -52,7 +52,8 @@ const Loading = ({
     return (
       <Box className={classes.container}>
         <Typography variant="body2" color="error">
-          There was a problem loading this request - {error && error.message}
+          There was a problem loading this request - {error.status}{" "}
+          {String(error.error)}
         </Typography>
       </Box>
     );

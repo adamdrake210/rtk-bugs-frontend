@@ -5,6 +5,7 @@ import { configureStore } from "@reduxjs/toolkit";
 // import reducer from "./reducer";
 import { bugsApi } from "services/bugsapi";
 import { userApi } from "services/usersapi";
+import { rtkQueryErrorLogger } from "./middleware/rtkQueryErrorLogger";
 
 // const reducers = {
 //   [USER_API_REDUCER_KEY]: userApi.reducer,
@@ -24,7 +25,11 @@ function configStore() {
     // Adding the api middleware enables caching, invalidation, polling,
     // and other useful features of `rtk-query`.
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(userApi.middleware, bugsApi.middleware),
+      getDefaultMiddleware().concat(
+        rtkQueryErrorLogger,
+        userApi.middleware,
+        bugsApi.middleware
+      ),
   });
 }
 
