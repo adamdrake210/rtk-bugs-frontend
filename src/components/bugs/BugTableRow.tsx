@@ -5,6 +5,7 @@ import { useResolveBugMutation } from "services/bugsapi";
 import { Bug } from "types/types";
 import DeleteBugButton from "./buttons/DeleteBugButton";
 import EditBugButton from "./buttons/EditBugButton";
+import { UNASSIGNED_USER_ID } from "./forms/BugForm";
 
 type Props = {
   bug: Bug;
@@ -23,7 +24,9 @@ const BugTableRow = ({ bug }: Props) => {
       </TableCell>
       <TableCell>{bug.description}</TableCell>
       <TableCell sx={{ textTransform: "uppercase" }}>
-        {bug.user.firstname} {bug.user.lastname}
+        {bug.user !== null
+          ? bug.user.firstname + " " + bug.user.lastname
+          : UNASSIGNED_USER_ID}
       </TableCell>
       <TableCell>
         <Checkbox checked={bug.resolved} onClick={() => resolveBug(bug)} />

@@ -7,6 +7,7 @@ import { IS_ONLY_ALPHABET_CHARACTERS } from "constants/form";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useAddNewBugMutation, useUpdateBugMutation } from "services/bugsapi";
+import { useGetAllUsersQuery } from "services/usersapi";
 import { Bug } from "types/types";
 
 const useStyles = makeStyles<Theme>((theme) => ({
@@ -31,13 +32,15 @@ const useStyles = makeStyles<Theme>((theme) => ({
 type CreateFormValues = {
   title: string;
   description: string;
-  userid: number | undefined;
+  userid: string;
 };
 
 type FormProps = {
   handleClose: () => void;
   editBug?: Bug;
 };
+
+export const UNASSIGNED_USER_ID = "unassigned";
 
 export default function BugForm({ handleClose, editBug }: FormProps) {
   const classes = useStyles();
@@ -47,11 +50,19 @@ export default function BugForm({ handleClose, editBug }: FormProps) {
     defaultValues: {
       title: editBug?.title || "",
       description: editBug?.description || "",
-      userid: editBug?.user.id || undefined,
+      userid: editBug?.user ? String(editBug?.user.id) : UNASSIGNED_USER_ID,
     },
   });
 
   const [addBug, { isLoading, isError, error }] = useAddNewBugMutation();
+
+  const {
+    data: users,
+    isLoading: isLoadingUsers,
+    isError: isErrorUsers,
+    error: errorGetUsers,
+  } = useGetAllUsersQuery();
+
   const [
     updateBug,
     { isLoading: isLoadingEdit, isError: isErrorEdit, error: errorEdit },
@@ -61,14 +72,10 @@ export default function BugForm({ handleClose, editBug }: FormProps) {
     const { title, description, userid } = formData;
     setApiError("");
 
-    if (!userid) {
-      throw new Error("You must pick a user");
-    }
-
     const finalFormData = {
       title,
       description,
-      userId: userid,
+      userId: userid === UNASSIGNED_USER_ID ? null : userid,
       resolved: false,
     };
 
@@ -77,10 +84,10 @@ export default function BugForm({ handleClose, editBug }: FormProps) {
         id: editBug.id,
         title,
         description,
-        userId: userid,
+        userId: userid === UNASSIGNED_USER_ID ? null : userid,
       })
         .unwrap()
-        .then((response) => {
+        .then(() => {
           handleClose();
         })
         .catch((error) => {
@@ -89,7 +96,7 @@ export default function BugForm({ handleClose, editBug }: FormProps) {
     } else {
       addBug(finalFormData)
         .unwrap()
-        .then((fulfilled) => {
+        .then(() => {
           handleClose();
         })
         .catch((error) => {
@@ -101,7 +108,7 @@ export default function BugForm({ handleClose, editBug }: FormProps) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={classes.formContainer}>
-      <Typography variant="h4">{editBug ? "Edit" : "Create"} Bug</Typography>
+      <Typography variant="h4">{editBug ? "Update" : "Create"} Bug</Typography>
 
       <Box
         sx={{ display: "flex", flexDirection: "column", my: 2, width: "100%" }}
@@ -135,8 +142,14 @@ export default function BugForm({ handleClose, editBug }: FormProps) {
           }}
           disabled={isLoading || isLoadingEdit}
         />
-
-        <UserSelectField control={control} />
+        <Loading
+          isLoading={isLoadingUsers}
+          loadingMessage="Loading Users..."
+          isError={isErrorUsers}
+          error={errorGetUsers}
+        >
+          <UserSelectField users={users} control={control} />
+        </Loading>
       </Box>
 
       {isLoading && (
@@ -156,6 +169,7 @@ export default function BugForm({ handleClose, editBug }: FormProps) {
           error={errorEdit}
         />
       )}
+
       {apiError && (
         <Typography variant="body1" color="error">
           Something went wrong - {apiError}
@@ -177,7 +191,7 @@ export default function BugForm({ handleClose, editBug }: FormProps) {
           color="primary"
           disabled={isLoading || isLoadingEdit}
         >
-          {editBug ? "Edit" : "Create"} Bug
+          {editBug ? "Update" : "Create"} Bug
         </Button>
       </div>
     </form>
