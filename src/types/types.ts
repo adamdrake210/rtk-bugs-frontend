@@ -9,14 +9,14 @@ export type Bug = {
 export type CreateBugPayload = {
   title: string;
   description: string;
-  userId: number;
+  userId: string | null;
   resolved: boolean;
 };
 
 export type UpdateBugPayload = {
   title?: string;
   description?: string;
-  userId?: number;
+  userId?: string | null;
 };
 
 export type User = {
