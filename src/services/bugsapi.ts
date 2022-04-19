@@ -36,11 +36,14 @@ export const bugsApi = createApi({
       }),
       invalidatesTags: [BUGS_API_TAG, USER_API_TAG],
     }),
-    resolveBug: builder.mutation<Bug, Pick<Bug, "id" | "resolved">>({
+    resolveBug: builder.mutation<Bug, Pick<Bug, "id" | "resolved" | "user">>({
       query: (bug) => ({
         url: `/bugs/${bug.id}`,
         method: "PATCH",
-        body: { resolved: !bug.resolved },
+        body: {
+          resolved: !bug.resolved,
+          userId: bug.user ? bug.user.id : null,
+        },
       }),
       invalidatesTags: [BUGS_API_TAG],
     }),

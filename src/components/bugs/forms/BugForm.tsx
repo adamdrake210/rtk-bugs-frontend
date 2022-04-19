@@ -120,7 +120,7 @@ export default function BugForm({ handleClose, editBug }: FormProps) {
           rules={{
             required: "A Bug Title is required",
             maxLength: {
-              value: 24,
+              value: 54,
               message: "Max Length exceeded! Please make the title shorter.",
             },
             pattern: IS_ONLY_ALPHABET_CHARACTERS,
