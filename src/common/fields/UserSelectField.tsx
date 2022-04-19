@@ -2,6 +2,7 @@ import React from "react";
 import { InputLabel, MenuItem, Select } from "@mui/material";
 import { Control, Controller } from "react-hook-form";
 import { User } from "types/types";
+import { UNASSIGNED_USER_ID } from "components/bugs/forms/BugForm";
 
 type Props = {
   control: Control<any>;
@@ -15,7 +16,7 @@ export default function UserSelectField({ control, users }: Props) {
       <Controller
         name="userid"
         control={control}
-        defaultValue="unassigned"
+        defaultValue={UNASSIGNED_USER_ID}
         render={({ field: { onChange, value }, fieldState: { error } }) => (
           <Select
             labelId="action-type-select-label"
@@ -24,7 +25,7 @@ export default function UserSelectField({ control, users }: Props) {
             error={!!error}
             onChange={onChange}
           >
-            <MenuItem value="unassigned">Unassigned</MenuItem>
+            <MenuItem value={UNASSIGNED_USER_ID}>Unassigned</MenuItem>
 
             {users?.length &&
               users.map((user) => (
