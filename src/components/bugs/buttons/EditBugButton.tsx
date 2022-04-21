@@ -2,7 +2,7 @@ import { Button } from "@mui/material";
 import { Edit } from "@mui/icons-material";
 
 import { useOpen } from "hooks/useOpen";
-import ModalContainer from "common/modals/ModalContainer";
+import ModalContainer from "components/common/modals/ModalContainer";
 import BugForm from "../forms/BugForm";
 import { Bug } from "types/types";
 

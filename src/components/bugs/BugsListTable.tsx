@@ -1,6 +1,6 @@
 import { TableBody, TableCell, TableHead, TableRow } from "@mui/material";
 
-import TableContainerBugs from "common/tables/TableContainerBugs";
+import TableContainerBugs from "components/common/tables/TableContainerBugs";
 import { Bug } from "types/types";
 import BugTableRow from "./BugTableRow";
 

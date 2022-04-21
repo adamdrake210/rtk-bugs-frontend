@@ -2,9 +2,9 @@ import { Button } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 import { useOpen } from "hooks/useOpen";
-import ModalContainer from "common/modals/ModalContainer";
+import ModalContainer from "components/common/modals/ModalContainer";
 import { Bug } from "types/types";
-import DeleteModal from "common/modals/DeleteModal";
+import DeleteModal from "components/common/modals/DeleteModal";
 import { useRemoveBugMutation } from "services/bugsapi";
 
 type DeleteBugButtonProps = {
