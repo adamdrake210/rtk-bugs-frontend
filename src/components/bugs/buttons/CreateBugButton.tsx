@@ -1,7 +1,7 @@
 import { Button } from "@mui/material";
 
 import { useOpen } from "hooks/useOpen";
-import ModalContainer from "common/modals/ModalContainer";
+import ModalContainer from "components/common/modals/ModalContainer";
 import BugForm from "../forms/BugForm";
 
 export default function CreateBugButton() {

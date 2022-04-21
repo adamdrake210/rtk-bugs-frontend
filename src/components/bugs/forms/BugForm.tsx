@@ -1,8 +1,8 @@
 import { Box, Button, Theme, Typography } from "@mui/material";
 import makeStyles from "@mui/styles/makeStyles";
-import ControlledTextField from "common/fields/ControlledTextField";
-import UserSelectField from "common/fields/UserSelectField";
-import Loading from "common/Loading";
+import ControlledTextField from "components/common/fields/ControlledTextField";
+import UserSelectField from "components/common/fields/UserSelectField";
+import Loading from "components/common/Loading";
 import { IS_ONLY_ALPHABET_CHARACTERS } from "constants/form";
 import { useState } from "react";
 import { useForm } from "react-hook-form";

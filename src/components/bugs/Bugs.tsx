@@ -6,10 +6,10 @@ export const Bugs = () => {
   return (
     <>
       <Box
-        sx={{ width: "100%", display: "flex", justifyContent: "center", my: 4 }}
+        sx={{ width: "100%", display: "flex", justifyContent: "center", mb: 4 }}
       >
         <Typography variant="h3" component="h1">
-          Bugs
+          Current Bugs
         </Typography>
       </Box>
       <UnResolvedBugs />
