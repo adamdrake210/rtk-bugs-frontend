@@ -11,6 +11,8 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MenuIcon from "@mui/icons-material/Menu";
 import { APP_NAME } from "constants/constants";
+import { useGetAllBugsQuery } from "services/bugsapi";
+import { Bug } from "types/types";
 
 export default function BugsAppBar() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -36,6 +38,15 @@ export default function BugsAppBar() {
   const handleMobileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
+
+  const emptyArray: Bug[] = [];
+
+  const { bugs } = useGetAllBugsQuery(undefined, {
+    selectFromResult: ({ data }) => ({
+      // Need to change to user.id when user info is available
+      bugs: data?.filter((bug) => bug.user?.id === 1) || emptyArray,
+    }),
+  });
 
   const menuId = "primary-search-account-menu";
   const renderMenu = (
@@ -79,10 +90,10 @@ export default function BugsAppBar() {
       <MenuItem>
         <IconButton
           size="large"
-          aria-label="show 17 new notifications"
+          aria-label={`show ${bugs?.length || 0} new notifications`}
           color="inherit"
         >
-          <Badge badgeContent={17} color="error">
+          <Badge badgeContent={bugs?.length || 0} color="error">
             <NotificationsIcon />
           </Badge>
         </IconButton>
@@ -121,10 +132,10 @@ export default function BugsAppBar() {
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
             <IconButton
               size="large"
-              aria-label="show 17 new notifications"
+              aria-label={`show ${bugs?.length || 0} new notifications`}
               color="inherit"
             >
-              <Badge badgeContent={17} color="error">
+              <Badge badgeContent={bugs?.length || 0} color="error">
                 <NotificationsIcon />
               </Badge>
             </IconButton>
